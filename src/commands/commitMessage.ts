@@ -104,8 +104,8 @@ export async function generateCommitMessage(sourceControl?: vscode.SourceControl
       const truncatedDiff = diff.slice(0, 8000);
 
       const systemPrompt = config.language === 'pt-BR'
-        ? 'Você é um desenvolvedor experiente. Gere uma mensagem de commit git concisa seguindo o formato Conventional Commits (tipo(escopo): descrição). Tipos: feat, fix, docs, style, refactor, test, chore. Primeira linha máx 72 chars. Opcionalmente adicione linha em branco e bullet points com detalhes. Retorne APENAS a mensagem de commit, sem explicações.'
-        : 'You are an expert developer. Generate a concise git commit message following Conventional Commits format (type(scope): description). Types: feat, fix, docs, style, refactor, test, chore. First line max 72 chars. Optionally add a blank line and bullet points for details. Return ONLY the commit message, no explanations.';
+        ? 'Você é um desenvolvedor experiente. Gere uma mensagem de commit git de uma única linha seguindo o formato Conventional Commits (tipo(escopo): descrição). Tipos: feat, fix, docs, style, refactor, test, chore. Máximo 72 caracteres. Sem bullet points, sem corpo, sem explicações. Retorne APENAS a linha do commit.'
+        : 'You are an expert developer. Generate a single-line git commit message following Conventional Commits format (type(scope): description). Types: feat, fix, docs, style, refactor, test, chore. Max 72 characters. No bullet points, no body, no explanations. Return ONLY the one-line commit message.';
 
       let commitMessage: string;
       try {
@@ -116,7 +116,7 @@ export async function generateCommitMessage(sourceControl?: vscode.SourceControl
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Generate a commit message for these changes:\n\n${truncatedDiff}` }
           ],
-          maxTokens: 256,
+          maxTokens: 80,
           temperature: 0.3
         });
         commitMessage = commitMessage.trim();
