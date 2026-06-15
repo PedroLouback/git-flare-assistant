@@ -1,0 +1,101 @@
+{
+  "name": "git-ai-assistant",
+  "displayName": "Git AI Assistant",
+  "description": "AI-powered commit messages, PR descriptions and code review via OpenRouter",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:git-ai-assistant.generateCommitMessage",
+    "onCommand:git-ai-assistant.generatePRDescription",
+    "onCommand:git-ai-assistant.reviewChanges"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "git-ai-assistant.generateCommitMessage",
+        "title": "Git AI: Generate Commit Message",
+        "category": "Git AI"
+      },
+      {
+        "command": "git-ai-assistant.generatePRDescription",
+        "title": "Git AI: Generate PR Description",
+        "category": "Git AI"
+      },
+      {
+        "command": "git-ai-assistant.reviewChanges",
+        "title": "Git AI: Review Changes",
+        "category": "Git AI"
+      }
+    ],
+    "menus": {
+      "scm/title": [
+        {
+          "command": "git-ai-assistant.generateCommitMessage",
+          "when": "scmProviderCount > 0"
+        },
+        {
+          "command": "git-ai-assistant.generatePRDescription",
+          "when": "scmProviderCount > 0"
+        },
+        {
+          "command": "git-ai-assistant.reviewChanges",
+          "when": "scmProviderCount > 0"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "git-ai-assistant.generateCommitMessage"
+        },
+        {
+          "command": "git-ai-assistant.generatePRDescription"
+        },
+        {
+          "command": "git-ai-assistant.reviewChanges"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Git AI Assistant",
+      "properties": {
+        "gitAiAssistant.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "OpenRouter API Key"
+        },
+        "gitAiAssistant.model": {
+          "type": "string",
+          "default": "google/gemini-2.0-flash-exp:free",
+          "description": "OpenRouter model ID"
+        },
+        "gitAiAssistant.baseBranch": {
+          "type": "string",
+          "default": "main",
+          "description": "Base branch for PR descriptions (main or master)"
+        },
+        "gitAiAssistant.language": {
+          "type": "string",
+          "enum": ["en", "pt-BR"],
+          "default": "en",
+          "description": "Language for generated content"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^18.0.0",
+    "typescript": "^5.3.0",
+    "vsce": "^2.15.0"
+  }
+}
