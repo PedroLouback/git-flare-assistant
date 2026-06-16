@@ -104,8 +104,8 @@ export async function generateCommitMessage(sourceControl?: vscode.SourceControl
       const truncatedDiff = diff.slice(0, 8000);
 
       const systemPrompt = config.language === 'pt-BR'
-        ? 'Você é um desenvolvedor experiente. Gere uma mensagem de commit git de uma única linha seguindo o formato Conventional Commits (tipo(escopo): descrição). Tipos: feat, fix, docs, style, refactor, test, chore. Máximo 72 caracteres. Sem bullet points, sem corpo, sem explicações. Retorne APENAS a linha do commit.'
-        : 'You are an expert developer. Generate a single-line git commit message following Conventional Commits format (type(scope): description). Types: feat, fix, docs, style, refactor, test, chore. Max 72 characters. No bullet points, no body, no explanations. Return ONLY the one-line commit message.';
+        ? 'Gere APENAS uma linha de mensagem de commit no formato Conventional Commits. Exemplo: "feat(extension): add github cli integration for pr descriptions". NÃO escreva nada além da mensagem. APENAS a linha.'
+        : 'Generate ONLY one line of commit message in Conventional Commits format. Example: "feat(extension): add github cli integration for pr descriptions". Do NOT write anything beyond the message. ONLY the line.';
 
       let commitMessage: string;
       try {
@@ -114,12 +114,13 @@ export async function generateCommitMessage(sourceControl?: vscode.SourceControl
           model: config.model,
           messages: [
             { role: 'system', content: systemPrompt },
-            { role: 'user', content: `Generate a commit message for these changes:\n\n${truncatedDiff}` }
+            { role: 'user', content: truncatedDiff }
           ],
           maxTokens: 80,
-          temperature: 0.3
+          temperature: 0.1
         });
         commitMessage = commitMessage.trim();
+        commitMessage = validateCommitMessage(commitMessage, config.language);
       } catch (err: any) {
         vscode.window.showErrorMessage(`OpenRouter API error: ${err.message}`);
         return;
@@ -137,4 +138,40 @@ export async function generateCommitMessage(sourceControl?: vscode.SourceControl
       }
     }
   );
+}
+
+function validateCommitMessage(message: string, language: 'en' | 'pt-BR'): string {
+  // Remove markdown headers, bullets, and common prefixes
+  let cleaned = message
+    .replace(/^#{1,6}\s*/g, '')
+    .replace(/^[-*]\s*/g, '')
+    .replace(/```/g, '')
+    .replace(/^Here.*commit.*message.*$/gim, '')
+    .replace(/^Example:?\s*/gi, '')
+    .replace(/^\s*"|"\s*$/g, '')
+    .trim();
+
+  // Extract first line if multiline
+  cleaned = cleaned.split('\n')[0].trim();
+
+  // Ensure Conventional Commits format (type(scope): description or type: description)
+  const conventionalCommitPattern = /^(feat|fix|docs|style|refactor|test|chore|build|ci|perf|revert)(\([\w-]+\))?:\s*.+$/;
+  
+  if (!conventionalCommitPattern.test(cleaned)) {
+    // Try to extract just the commit part from common patterns
+    const match = cleaned.match(/^(feat|fix|docs|style|refactor|test|chore|build|ci|perf|revert)(\([\w-]+\))?:\s*(.+)$/i);
+    if (match) {
+      cleaned = `${match[1]}${match[2] || ''}: ${match[3]}`;
+    } else {
+      // Fallback: wrap in docs: if it looks like a description
+      cleaned = `docs(extension): ${cleaned.toLowerCase().replace(/^changelog\./, '').replace(/\.$/, '')}`;
+    }
+  }
+
+  // Truncate to 72 chars max
+  if (cleaned.length > 72) {
+    cleaned = cleaned.substring(0, 72);
+  }
+
+  return cleaned;
 }

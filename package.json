@@ -1,8 +1,8 @@
 {
-  "name": "gitflare",
-  "displayName": "GitFlare",
+  "name": "git-ai-assistant",
+  "displayName": "Git AI Assistant",
   "description": "AI-powered commit messages, PR descriptions and code review via OpenRouter",
-  "version": "0.0.3",
+  "version": "0.0.1",
   "publisher": "PedroLouback",
   "author": {
     "name": "PedroLouback",
