@@ -30,6 +30,5 @@ jobs:
       - name: Publish to VS Code Marketplace
         uses: HaaLeo/publish-vscode-extension@v2
         with:
-          extensionId: PedroLouback.git-ai-assistant
-          extensionFile: git-ai-assistant-*.vsix
-          personalAccessToken: ${{ secrets.VSCE_PAT }}
+          extensionFile: git-flare-assistant-*.vsix
+          pat: ${{ secrets.VSCE_PAT }}
