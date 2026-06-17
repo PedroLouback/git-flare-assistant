@@ -31,7 +31,7 @@ jobs:
           VSIX=$(ls git-flare-assistant-*.vsix)
           echo "vsix=$VSIX" >> $GITHUB_OUTPUT
       - name: Publish to VS Code Marketplace
-        uses: lannonbr/vsce-action@v4.0.0
+        uses: lannonbr/vsce-action@4.0.0
         with:
           pat: ${{ secrets.VSCE_PAT }}
           packagePath: ${{ steps.package.outputs.vsix }}
