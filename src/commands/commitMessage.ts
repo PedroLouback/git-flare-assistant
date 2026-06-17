@@ -79,12 +79,12 @@ export async function generateCommitMessage(sourceControl?: vscode.SourceControl
 
   const repoName = path.basename(repoPath);
 
-  await vscode.window.withProgress(
-    {
-      location: vscode.ProgressLocation.Notification,
-      title: `Git AI: Generating commit message for ${repoName}...`,
-      cancellable: false
-    },
+await vscode.window.withProgress(
+		{
+			location: vscode.ProgressLocation.Notification,
+			title: `GitFlare: Generating commit message for ${repoName}...`,
+			cancellable: false
+		},
     async () => {
       let diff: string;
       try {

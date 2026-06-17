@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { getConfig, validateConfig, openSettings, ExtensionConfig } from '../config';
 import { callOpenRouter, OpenRouterMessage } from '../openrouter';
-import { getStagedDiff, getCurrentBranch } from '../gitService';
+import { getStagedDiff, getCurrentBranch, ensureGitRepo } from '../gitService';
 import { execSync } from 'child_process';
 
 interface PRInfo {
@@ -88,8 +88,15 @@ export async function generatePRDescription(): Promise<void> {
 		return;
 	}
 
+	try {
+		ensureGitRepo();
+	} catch (err: any) {
+		vscode.window.showErrorMessage(err.message);
+		return;
+	}
+
 	const prInput = await vscode.window.showInputBox({
-		title: 'Git AI: Generate PR Description',
+		title: 'GitFlare: Generate PR Description',
 		placeHolder: 'Enter PR number (e.g., 123) or PR URL',
 		prompt: 'The extension will fetch PR details and diff using GitHub CLI'
 	});
@@ -111,12 +118,12 @@ export async function generatePRDescription(): Promise<void> {
 
 	if (!isGitHubCLIAvailable()) {
 		const install = await vscode.window.showErrorMessage(
-			'GitHub CLI (gh) not found. Install it or disable "gitAiAssistant.useGitHubCLI" in settings.',
+			'GitHub CLI (gh) not found. Install it or disable "gitFlareAssistant.useGitHubCLI" in settings.',
 			'Disable Setting',
 			'Learn More'
 		);
 		if (install === 'Disable Setting') {
-			await vscode.workspace.getConfiguration('gitAiAssistant').update('useGitHubCLI', false, vscode.ConfigurationTarget.Global);
+			await vscode.workspace.getConfiguration('gitFlareAssistant').update('useGitHubCLI', false, vscode.ConfigurationTarget.Global);
 		} else if (install === 'Learn More') {
 			vscode.env.openExternal(vscode.Uri.parse('https://cli.github.com'));
 		}
@@ -126,7 +133,7 @@ export async function generatePRDescription(): Promise<void> {
 	await vscode.window.withProgress(
 		{
 			location: vscode.ProgressLocation.Notification,
-			title: `Git AI: Fetching PR #${prNumber}...`,
+			title: `GitFlare: Fetching PR #${prNumber}...`,
 			cancellable: false
 		},
 		async () => {

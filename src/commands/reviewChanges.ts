@@ -32,7 +32,7 @@ export async function reviewChanges(): Promise<void> {
 	await vscode.window.withProgress(
 		{
 			location: vscode.ProgressLocation.Notification,
-			title: 'Git AI: Reviewing changes...',
+			title: 'GitFlare: Reviewing changes...',
 			cancellable: false
 		},
 		async () => {

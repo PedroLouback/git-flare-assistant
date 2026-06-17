@@ -52,19 +52,19 @@ export async function callOpenRouter(options: OpenRouterOptions): Promise<string
   });
 
   return new Promise((resolve, reject) => {
-    const req = https.request(
-      {
-        hostname: 'openrouter.ai',
-        path: '/api/v1/chat/completions',
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(body),
-          'HTTP-Referer': 'https://github.com/git-ai-assistant',
-          'X-Title': 'Git AI Assistant'
-        }
-      },
+		const req = https.request(
+			{
+				hostname: 'openrouter.ai',
+				path: '/api/v1/chat/completions',
+				method: 'POST',
+				headers: {
+					'Authorization': `Bearer ${apiKey}`,
+					'Content-Type': 'application/json',
+					'Content-Length': Buffer.byteLength(body),
+					'HTTP-Referer': 'https://github.com/git-flare-assistant',
+					'X-Title': 'GitFlare Assistant'
+				}
+			},
       (res) => {
         let rawData = '';
         res.on('data', (chunk) => { rawData += chunk; });

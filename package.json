@@ -1,6 +1,6 @@
 {
-  "name": "git-ai-assistant",
-  "displayName": "Git AI Assistant",
+  "name": "git-flare-assistant",
+  "displayName": "GitFlare Assistant",
   "description": "AI-powered commit messages, PR descriptions and code review via OpenRouter",
   "version": "0.0.5",
   "publisher": "PedroLouback",
@@ -12,7 +12,7 @@
   "icon": "icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/PedroLouback/git-ai-assistant"
+    "url": "https://github.com/PedroLouback/git-flare-assistant"
   },
   "engines": {
     "vscode": "^1.85.0"
@@ -21,77 +21,77 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:git-ai-assistant.generateCommitMessage",
-    "onCommand:git-ai-assistant.generatePRDescription",
-    "onCommand:git-ai-assistant.reviewChanges"
+    "onCommand:git-flare-assistant.generateCommitMessage",
+    "onCommand:git-flare-assistant.generatePRDescription",
+    "onCommand:git-flare-assistant.reviewChanges"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "git-ai-assistant.generateCommitMessage",
-        "title": "Git AI: Generate Commit Message",
-        "category": "Git AI",
+        "command": "git-flare-assistant.generateCommitMessage",
+        "title": "GitFlare: Generate Commit Message",
+        "category": "GitFlare",
         "icon": "$(sparkle)"
       },
       {
-        "command": "git-ai-assistant.generatePRDescription",
-        "title": "Git AI: Generate PR Description",
-        "category": "Git AI"
+        "command": "git-flare-assistant.generatePRDescription",
+        "title": "GitFlare: Generate PR Description",
+        "category": "GitFlare"
       },
       {
-        "command": "git-ai-assistant.reviewChanges",
-        "title": "Git AI: Review Changes",
-        "category": "Git AI"
+        "command": "git-flare-assistant.reviewChanges",
+        "title": "GitFlare: Review Changes",
+        "category": "GitFlare"
       }
     ],
     "menus": {
       "scm/title": [
         {
-          "command": "git-ai-assistant.generateCommitMessage",
+          "command": "git-flare-assistant.generateCommitMessage",
           "group": "navigation",
           "when": "scmProvider == git"
         },
         {
-          "command": "git-ai-assistant.generatePRDescription",
+          "command": "git-flare-assistant.generatePRDescription",
           "when": "scmProviderCount > 0"
         },
         {
-          "command": "git-ai-assistant.reviewChanges",
+          "command": "git-flare-assistant.reviewChanges",
           "when": "scmProviderCount > 0"
         }
       ],
       "commandPalette": [
         {
-          "command": "git-ai-assistant.generateCommitMessage"
+          "command": "git-flare-assistant.generateCommitMessage"
         },
         {
-          "command": "git-ai-assistant.generatePRDescription"
+          "command": "git-flare-assistant.generatePRDescription"
         },
         {
-          "command": "git-ai-assistant.reviewChanges"
+          "command": "git-flare-assistant.reviewChanges"
         }
       ]
     },
     "configuration": {
-      "title": "Git AI Assistant",
+      "title": "GitFlare Assistant",
       "properties": {
-        "gitAiAssistant.apiKey": {
+        "gitFlareAssistant.apiKey": {
           "type": "string",
           "default": "",
           "description": "OpenRouter API Key"
         },
-        "gitAiAssistant.model": {
+        "gitFlareAssistant.model": {
           "type": "string",
           "default": "google/gemini-2.0-flash-exp:free",
           "description": "OpenRouter model ID"
         },
-        "gitAiAssistant.baseBranch": {
+        "gitFlareAssistant.baseBranch": {
           "type": "string",
           "default": "main",
           "description": "Base branch for PR descriptions (main or master)"
         },
-        "gitAiAssistant.language": {
+        "gitFlareAssistant.language": {
           "type": "string",
           "enum": [
             "en",
@@ -100,7 +100,7 @@
           "default": "en",
           "description": "Language for generated content"
         },
-        "gitAiAssistant.useGitHubCLI": {
+        "gitFlareAssistant.useGitHubCLI": {
           "type": "boolean",
           "default": true,
           "description": "Use GitHub CLI (gh) to fetch PR changes for description generation. Requires 'gh' installed and authenticated."

@@ -24,6 +24,15 @@ function git(command: string, cwd: string): string {
   }
 }
 
+export function ensureGitRepo(cwd?: string): void {
+  const root = cwd ?? getWorkspaceRoot();
+  try {
+    git('rev-parse --is-inside-work-tree', root);
+  } catch {
+    throw new Error('Not a git repository. Please open a folder that is a Git repository.');
+  }
+}
+
 export async function getStagedDiff(cwd?: string): Promise<string> {
   const root = cwd ?? getWorkspaceRoot();
 

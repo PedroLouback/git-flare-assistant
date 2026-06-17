@@ -1,11 +1,11 @@
 <div align="center">
 
-# Git AI Assistant
+# GitFlare Assistant
 
-[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code%20Marketplace-Instalar-blue?logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=PedroLouback.git-ai-assistant)
-[![GitHub Repo](https://img.shields.io/badge/GitHub-Repositório-black?logo=github)](https://github.com/PedroLouback/git-ai-assistant)
-[![License](https://img.shields.io/github/license/PedroLouback/git-ai-assistant)](https://github.com/PedroLouback/git-ai-assistant/blob/main/LICENSE)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/PedroLouback/git-ai-assistant/publish.yml?branch=main&logo=githubactions&label=Build)](https://github.com/PedroLouback/git-ai-assistant/actions)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code%20Marketplace-Instalar-blue?logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=PedroLouback.git-flare-assistant)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repositório-black?logo=github)](https://github.com/PedroLouback/git-flare-assistant)
+[![License](https://img.shields.io/github/license/PedroLouback/git-flare-assistant)](https://github.com/PedroLouback/git-flare-assistant/blob/main/LICENSE)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/PedroLouback/git-flare-assistant/publish.yml?branch=main&logo=githubactions&label=Build)](https://github.com/PedroLouback/git-flare-assistant/actions)
 
 Gere mensagens de commit, descrições de PR e revisões de código usando modelos de IA gratuitos via OpenRouter — diretamente no VS Code.
 
@@ -27,12 +27,12 @@ Gere mensagens de commit, descrições de PR e revisões de código usando model
 
 1. Abra o VS Code
 2. Vá para Extensões (`Ctrl+Shift+X` / `Cmd+Shift+X`)
-3. Pesquise por **"Git AI Assistant"**
+  3. Pesquise por **"GitFlare Assistant"**
 4. Clique em **Instalar**
 
 ### Pelo Arquivo VSIX
 
-1. Baixe o arquivo `.vsix` em [Releases](https://github.com/PedroLouback/git-ai-assistant/releases)
+  1. Baixe o arquivo `.vsix` em [Releases](https://github.com/PedroLouback/git-flare-assistant/releases)
 2. Instale via paleta de comandos: `Extensions: Install from VSIX`
 
 ## ⚙️ Configuração
@@ -46,15 +46,15 @@ Gere mensagens de commit, descrições de PR e revisões de código usando model
 
 ### 2. Configure a Extensão
 
-Abra as Configurações do VS Code (`Ctrl+,` / `Cmd+,`) e pesquise por **Git AI Assistant**:
+Abra as Configurações do VS Code (`Ctrl+,` / `Cmd+,`) e pesquise por **GitFlare Assistant**:
 
 | Configuração | Padrão | Descrição |
 |--------------|--------|-----------|
-| `gitAiAssistant.apiKey` | `""` | **Obrigatório** - Sua chave API da OpenRouter |
-| `gitAiAssistant.model` | `google/gemini-2.0-flash-exp:free` | Modelo de IA a usar (veja [modelos](https://openrouter.ai/models)) |
-| `gitAiAssistant.baseBranch` | `main` | Branch base para comparação de diff da PR |
-| `gitAiAssistant.language` | `pt-BR` | Idioma de saída: `en` ou `pt-BR` |
-| `gitAiAssistant.useGitHubCLI` | `true` | Usar `gh` CLI para descrições de PR (requer [GitHub CLI](https://cli.github.com)) |
+| `gitFlareAssistant.apiKey` | `""` | **Obrigatório** - Sua chave API da OpenRouter |
+| `gitFlareAssistant.model` | `google/gemini-2.0-flash-exp:free` | Modelo de IA a usar (veja [modelos](https://openrouter.ai/models)) |
+| `gitFlareAssistant.baseBranch` | `main` | Branch base para comparação de diff da PR |
+| `gitFlareAssistant.language` | `pt-BR` | Idioma de saída: `en` ou `pt-BR` |
+| `gitFlareAssistant.useGitHubCLI` | `true` | Usar `gh` CLI para descrições de PR (requer [GitHub CLI](https://cli.github.com)) |
 
 ### Modelos Gratuitos Populares
 
@@ -71,7 +71,7 @@ Abra as Configurações do VS Code (`Ctrl+,` / `Cmd+,`) e pesquise por **Git AI 
 
 1. Stage suas alterações: `git add .`
 2. Abra a Paleta de Comandos (`Ctrl+Shift+P` / `Cmd+Shift+P`)
-3. Execute **Git AI: Generate Commit Message**
+  3. Execute **GitFlare: Generate Commit Message**
 4. A mensagem gerada é inserida na caixa de entrada do SCM
 
 > **Dica**: Você também pode clicar no ícone ✨ no painel de controle de origem
@@ -81,7 +81,7 @@ Abra as Configurações do VS Code (`Ctrl+,` / `Cmd+,`) e pesquise por **Git AI 
 **Pré-requisitos:** Instale e autentique o [GitHub CLI](https://cli.github.com) (`gh auth login`)
 
 1. Abra a Paleta de Comandos
-2. Execute **Git AI: Generate PR Description**
+  2. Execute **GitFlare: Generate PR Description**
 3. Digite o número da PR (ex: `123`) ou URL completa da PR
 4. A extensão busca detalhes da PR via `gh pr view` e o diff
 5. IA gera uma descrição estruturada no painel webview
@@ -91,7 +91,7 @@ Abra as Configurações do VS Code (`Ctrl+,` / `Cmd+,`) e pesquise por **Git AI 
 ### Revisar Alterações
 
 1. Abra a Paleta de Comandos
-2. Execute **Git AI: Review Changes**
+  2. Execute **GitFlare: Review Changes**
 3. Escolha o escopo: **Alterações staged** ou **Todas as alterações**
 4. O feedback de revisão aparece em um painel webview com:
    - 🔴 Problemas Críticos
@@ -104,21 +104,21 @@ Abra as Configurações do VS Code (`Ctrl+,` / `Cmd+,`) e pesquise por **Git AI 
 <details>
 <summary>Geração de Mensagem de Commit</summary>
 
-![Gerar Commit](https://raw.githubusercontent.com/PedroLouback/git-ai-assistant/main/resources/commit-message.gif)
+![Gerar Commit](https://raw.githubusercontent.com/PedroLouback/git-flare-assistant/main/resources/commit-message.gif)
 
 </details>
 
 <details>
 <summary>Geração de Descrição de PR</summary>
 
-![PR Description](https://raw.githubusercontent.com/PedroLouback/git-ai-assistant/main/resources/pr-description.gif)
+![PR Description](https://raw.githubusercontent.com/PedroLouback/git-flare-assistant/main/resources/pr-description.gif)
 
 </details>
 
 <details>
 <summary>Revisão de Código</summary>
 
-![Code Review](https://raw.githubusercontent.com/PedroLouback/git-ai-assistant/main/resources/code-review.gif)
+![Code Review](https://raw.githubusercontent.com/PedroLouback/git-flare-assistant/main/resources/code-review.gif)
 
 </details>
 

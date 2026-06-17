@@ -9,7 +9,7 @@ export interface ExtensionConfig {
 }
 
 export function getConfig(): ExtensionConfig {
-	const config = vscode.workspace.getConfiguration('gitAiAssistant');
+	const config = vscode.workspace.getConfiguration('gitFlareAssistant');
 	return {
 		apiKey: config.get<string>('apiKey') ?? '',
 		model: config.get<string>('model') ?? 'google/gemini-2.0-flash-exp:free',
@@ -27,5 +27,5 @@ export function validateConfig(config: ExtensionConfig): string | null {
 }
 
 export function openSettings(): void {
-	vscode.commands.executeCommand('workbench.action.openSettings', 'gitAiAssistant');
+	vscode.commands.executeCommand('workbench.action.openSettings', 'gitFlareAssistant');
 }
