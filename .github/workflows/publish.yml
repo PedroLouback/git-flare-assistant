@@ -25,10 +25,14 @@ jobs:
         run: npm run compile
 
       - name: Package extension
-        run: npm run package
+        id: package
+        run: |
+          npm run package
+          VSIX=$(ls git-flare-assistant-*.vsix)
+          echo "vsix=$VSIX" >> $GITHUB_OUTPUT
 
       - name: Publish to VS Code Marketplace
         uses: HaaLeo/publish-vscode-extension@v2
         with:
-          extensionFile: git-flare-assistant-*.vsix
           pat: ${{ secrets.VSCE_PAT }}
+          extensionFile: ${{ steps.package.outputs.vsix }}
