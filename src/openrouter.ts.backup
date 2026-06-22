@@ -3,15 +3,15 @@ import { validateApiKey } from './config';
 
 const DANGEROUS_PATTERNS = [
   /`[^`]*password[^`]*`/,           // Senhas de código
-  /API Key[:=]\s*['\"][^'\"]+['\"]/,
-  /senha[:=]\s*['\"][^'\"]+['\"]/,
-  /token[:=]\s*['\"][^'\"]+['\"]/,
-  /Bearer\s+[A-Za-z0-9_-]{20,}/,
-  /git.*config.*show.*url/,
-  /\.env.*file.*show/,
-  /secrets\.(github|gitlab|aws)/,
-  /chave.*privada|privada=/,
-  /secret[0-9]*=/,
+  /API Key[:=]\s*['"][^'\"]+['\"]/,  // Chaves de API
+  /senha[:=]\s*['"][^'\"]+['\"]/,     // Senhas em português
+  /token[:=]\s*['"][^'\"]+['\"]/,     // Tokens
+  /Bearer\s+[A-Za-z0-9_-]{20,}/,    // Tokens Bearer
+  /git.*config.*show.*url/,          // Configuração git
+  /\.env.*file.*show/,                // .env
+  /secrets\.(github|gitlab|aws)/,   // Secrets
+  /chave.*privi|privada/,           // Chaves privadas
+  /secret[0-9]*=/,                  // Segredos genéricos
 ];
 
 export interface OpenRouterMessage {
@@ -46,19 +46,14 @@ function validateModel(model: string): void {
   if (!model || typeof model !== 'string') {
     throw new Error('Modelo do OpenRouter é obrigatório');
   }
-  if (model.length < 10) {
-    throw new Error('Modelo do OpenRouter muito curto');
-  }
-  if (model.length > 100) {
-    throw new Error('Modelo do OpenRouter muito longo');
-  }
-  if (model.includes('\n') || model.includes('\r') || model.includes('\t')) {
-    throw new Error('Modelo do OpenRouter contém caracteres inválidos');
-  }
-
-  const modelPattern = /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_-]+(:[a-zA-Z0-9]*)?$/;
-  if (!modelPattern.test(model.trim())) {
-    throw new Error(`Modelo do OpenRouter em formato inválido: ${model}`);
+  const validModels = [
+    'google/gemini-2.0-flash-exp:free',
+    'meta/llama-3.1-405b-instruct:free',
+    'openai/gpt-4o-mini',
+    'anthropic/claude-3-5-sonnet:free'
+  ];
+  if (!validModels.includes(model)) {
+    throw new Error(`Modelo do OpenRouter não permitido: ${model}`);
   }
 }
 
