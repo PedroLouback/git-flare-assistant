@@ -85,7 +85,7 @@ function validateMessages(messages: OpenRouterMessage[]): void {
     if (!message.content || typeof message.content !== 'string') {
       throw new Error('Conteúdo de mensagem obrigatório');
     }
-    if (message.content.length > 10000) {
+    if (message.content.length > 20000) {
       throw new Error('Conteúdo de mensagem muito grande');
     }
     
@@ -117,7 +117,7 @@ function extractContent(data: any): string {
   for (const candidate of candidates) {
     if (candidate && typeof candidate === 'string' && candidate.trim().length > 0) {
       const content = candidate.trim();
-      if (content.length > 5000) {
+      if (content.length > 50000) {
         throw new Error('Resposta muito grande do modelo');
       }
       return content;
