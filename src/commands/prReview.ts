@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import { getConfig, validateConfig, openSettings } from '../config';
+import { callOpenRouter } from '../openrouter';
 import { execSync } from 'child_process';
+import * as path from 'path';
 
 export interface PRReviewConfig {
 	prNumber: string;
@@ -268,7 +270,7 @@ export async function reviewPR(): Promise<void> {
 				},
 				async () => {
 					try {
-						const reviewContent = generateReviewContent(prInfo, diff, analysis, config.language);
+						const reviewContent = await generateReviewContent(prInfo, diff, analysis, config);
 						showReviewResults(prInfo, reviewContent);
 					} catch (error) {
 						vscode.window.showErrorMessage(`Failed to generate review: ${error instanceof Error ? error.message : String(error)}`);
@@ -323,8 +325,8 @@ function analyzeChanges(diff: string, prInfo: any): { violations: Violation[]; s
 	return { violations, suggestions };
 }
 
-function generateReviewContent(prInfo: any, diff: string, analysis: { violations: Violation[]; suggestions: Suggestion[] }, language: string): string {
-	const systemPrompt = language === 'pt-BR' 
+async function generateReviewContent(prInfo: any, diff: string, analysis: { violations: Violation[]; suggestions: Suggestion[] }, config: any): Promise<string> {
+	const systemPrompt = config.language === 'pt-BR' 
 		? 'Você é um revisor de código sênior. Analise a PR e forneça um relatório detalhado em português com: 1) Resumo executivo, 2) Problemas críticos, 3) Avisos, 4) Aspectos positivos, 5) Recomendações, 6) Nota final (A-F). Seja construtivo e profissional.'
 		: 'You are a senior code reviewer. Analyze the PR and provide a detailed report with: 1) Executive summary, 2) Critical issues, 3) Warnings, 4) Positive aspects, 5) Recommendations, 6) Final grade (A-F). Be constructive and professional.';
 
@@ -345,7 +347,16 @@ Security violations found: ${analysis.violations.length}
 Suggestions: ${analysis.suggestions.length}
 `;
 
-	return `${systemPrompt}\n\n${context}`;
+	return callOpenRouter({
+		apiKey: config.apiKey,
+		model: config.model,
+		messages: [
+			{ role: 'system', content: systemPrompt },
+			{ role: 'user', content: context }
+		],
+		maxTokens: 2000,
+		temperature: 0.2
+	});
 }
 
 function showReviewResults(prInfo: any, reviewContent: string): void {

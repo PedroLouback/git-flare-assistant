@@ -2,7 +2,7 @@
   "name": "git-flare-assistant",
   "displayName": "GitFlare Assistant",
   "description": "AI-powered commit messages, PR descriptions and code review via OpenRouter",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "publisher": "PedroLouback",
   "license": "MIT",
   "icon": "icon.png",
