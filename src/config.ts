@@ -66,19 +66,39 @@ export function validateApiKey(apiKey: string): boolean {
 	return true;
 }
 export function isValidPRNumber(input: string): string | null {
-	if (!input || typeof input !== 'string') return null;
-	
-	const githubURLOptions = input.match(/github\.com\/([a-zA-Z0-9_.-]+\/\S+)\/pull\/(\d+)/);
-	if (githubURLOptions) {
-		const prNumber = githubURLOptions[2];
-		if (/^\d{1,8}$/.test(prNumber)) {
-			return prNumber;
-		}
-	}
-	
-	if (/^\d{1,8}$/.test(input.trim())) {
-		return input.trim();
-	}
-	
-	return null;
+  if (!input || typeof input !== 'string') return null;
+  
+  const githubURLOptions = input.match(/github\.com\/([a-zA-Z0-9_.-]+\/\S+)\/pull\/(\d+)/);
+  if (githubURLOptions) {
+    const prNumber = githubURLOptions[2];
+    if (/^\d{1,8}$/.test(prNumber)) {
+      return prNumber;
+    }
+  }
+  
+  if (/^\d{1,8}$/.test(input.trim())) {
+    return input.trim();
+  }
+  
+  return null;
+}
+
+export function getAvailableModels(): string[] {
+  return [
+    'google/gemini-2.0-flash-exp:free',
+    'openai/gpt-4o-mini',
+    'anthropic/claude-3-5-haiku-20241022',
+    'cohere/command-r-plus',
+    'fireworks/o-1-preview',
+    'google/gemini-pro',
+    'meta-llama/llama-3.1-405b-instruct',
+    'mistralai/mistral-large-latest',
+    'ai21/j2-ultra',
+    'perplexity/llama-3.1-sonar-small-128k-online'
+  ];
+}
+
+export function validateModel(model: string): boolean {
+  const availableModels = getAvailableModels();
+  return availableModels.includes(model);
 }

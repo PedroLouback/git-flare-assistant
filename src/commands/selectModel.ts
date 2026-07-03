@@ -75,7 +75,7 @@ export async function selectModel(): Promise<void> {
           modelName: model.name || model.id
         };
         return pickItem;
-      });
+      }) as any[];
 
     if (validModels.length === 0) {
       throw new Error('No available models found');
@@ -109,29 +109,28 @@ export async function selectModel(): Promise<void> {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 
     vscode.window.showWarningMessage(
-      `Failed to fetch models from API (${errorMessage.substring(0, 100)}). Using available curated models.,
-       'Configure API Key',
-       'Use Curated Models'
-    ).then((selection) => {
+      'Failed to fetch models from API (' + errorMessage.substring(0, 100) + '). Using available curated models.',
+      'Configure API Key',
+      'Use Curated Models'
+    ).then(async (selection) => {
       if (selection === 'Configure API Key') {
         openSettings();
       } else if (selection === 'Use Curated Models') {
         const availableModels = getAvailableModels();
         if (availableModels.length > 0) {
-          const picked = await vscode.window.showQuickPick(
-            availableModels.map(modelId => {
-              const modelName = modelId.split('/')[1] || modelId;
-              return {
-                label: modelName,
-                description: modelId,
-                modelId: modelId
-              };
-            }),
-            {
-              placeHolder: 'Select model from curated list... (API failed)',
-              matchOnDescription: true
-            }
-          );
+          const quickPickItems = availableModels.map(modelId => {
+            const modelName = modelId.split('/')[1] || modelId;
+            return {
+              label: modelName,
+              description: modelId,
+              modelId: modelId
+            };
+          });
+          
+          const picked = await vscode.window.showQuickPick(quickPickItems, {
+            placeHolder: 'Select model from curated list... (API failed)',
+            matchOnDescription: true
+          });
 
           if (picked) {
             await vscode.workspace.getConfiguration('gitFlareAssistant').update(
@@ -140,7 +139,7 @@ export async function selectModel(): Promise<void> {
               vscode.ConfigurationTarget.Global
             );
             vscode.window.showInformationMessage(
-              `Model updated to ${picked.modelId} (from curated list))`
+              'Model updated to ' + picked.modelId + ' (from curated list)'
             );
           }
         } else {

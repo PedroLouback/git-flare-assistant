@@ -5,6 +5,22 @@ All notable changes to the "GitFlare Assistant" extension will be documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.5] - 2026-07-03
+
+### Fixed
+- **PR Review Tool agora gera análise real via IA** (não mais só o prompt)
+  - Integração correta com OpenRouter API
+  - Relatório gerado pela IA em vez do template estático
+- Correção de chamada assíncrona em generateReviewContent
+
+### Added
+- **PR Review Tool**: Analyze pull requests from other users directly in VS Code
+- **Interactive Model Picker** com busca por nome/ID
+
+### Configuration
+- New setting: `gitFlareAssistant.useModelPicker` (default: true) - Show model picker in settings
+- Model selection command: `GitFlare: Select Model`
+
 ## [Unreleased]
 
 ### Added
