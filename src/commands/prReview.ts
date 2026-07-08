@@ -35,7 +35,7 @@ export interface PRReviewConfig {
 
 export interface Violation {
 	type: 'error' | 'warning' | 'info';
-	category: 'security' | 'format' | 'performance' | 'maintainability';
+	category: 'security' | 'format' | 'performance' | 'maintainability' | 'observability';
 	message: string;
 	location: string;
 	severity: number;
@@ -260,7 +260,7 @@ export async function reviewPR(): Promise<void> {
 				return;
 			}
 
-			const analysis = analyzeChanges(diff, prInfo);
+			const analysis = analyzeChanges(diff, prInfo, config);
 
 			await vscode.window.withProgress(
 				{
@@ -281,9 +281,11 @@ export async function reviewPR(): Promise<void> {
 	);
 }
 
-function analyzeChanges(diff: string, prInfo: any): { violations: Violation[]; suggestions: Suggestion[] } {
+function analyzeChanges(diff: string, prInfo: any, config: any): { violations: Violation[]; suggestions: Suggestion[] } {
 	const violations: Violation[] = [];
 	const suggestions: Suggestion[] = [];
+
+	const { applyHEDRORules } = require('../heuristics/hedroReview');
 
 	const securityPatterns = [
 		{ pattern: /password\s*[:=]\s*['"][^'"]+['"]/, message: 'Hardcoded password detected' },
@@ -322,13 +324,18 @@ function analyzeChanges(diff: string, prInfo: any): { violations: Violation[]; s
 		}
 	}
 
+	if (config.enableHEDRORules && config.companyPatterns === 'hedro') {
+		const hedroAnalysis = applyHEDRORules(diff);
+		violations.push(...hedroAnalysis.violations);
+		suggestions.push(...hedroAnalysis.suggestions);
+	}
+
 	return { violations, suggestions };
 }
 
 async function generateReviewContent(prInfo: any, diff: string, analysis: { violations: Violation[]; suggestions: Suggestion[] }, config: any): Promise<string> {
-	const systemPrompt = config.language === 'pt-BR' 
-		? 'Você é um revisor de código sênior. Analise a PR e forneça um relatório detalhado em português com: 1) Resumo executivo, 2) Problemas críticos, 3) Avisos, 4) Aspectos positivos, 5) Recomendações, 6) Nota final (A-F). Seja construtivo e profissional.'
-		: 'You are a senior code reviewer. Analyze the PR and provide a detailed report with: 1) Executive summary, 2) Critical issues, 3) Warnings, 4) Positive aspects, 5) Recommendations, 6) Final grade (A-F). Be constructive and professional.';
+	const hedroPromptModule = require('../heuristics/hedroReview');
+	const systemPrompt = hedroPromptModule.getHEDROSystemPrompt(config.language);
 
 	const context = `
 PR Title: ${prInfo.title}
@@ -345,6 +352,14 @@ ${diff.slice(0, 20000)}
 
 Security violations found: ${analysis.violations.length}
 Suggestions: ${analysis.suggestions.length}
+
+HEDRO-specific rules applied:
+- Error handling (no unwrap in init)
+- SQL documentation required
+- Platform enum usage
+- RabbitMQ health check
+- SQL parameter ordering
+- Ruskit v1.73.5+
 `;
 
 	return callOpenRouter({
