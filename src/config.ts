@@ -6,10 +6,12 @@ export interface ExtensionConfig {
 	baseBranch: string;
 	language: 'en' | 'pt-BR';
 	useGitHubCLI: boolean;
+	enableHEDRORules: boolean;
+	companyPatterns: string;
 }
 
 const DANGEROUS_PATTERNS = [
-  /`[^`]*password[^`]*`/,           // Senhas de código
+  /`[^`]*password[^`]*`/,           
   /API Key[:=]\s*['"][^'\"]+['\"]/,
   /senha[:=]\s*['"][^'\"]+['\"]/,
   /token[:=]\s*['"][^'\"]+['\"]/,
@@ -28,7 +30,9 @@ export function getConfig(): ExtensionConfig {
 		model: config.get<string>('model') ?? 'google/gemini-2.0-flash-exp:free',
 		baseBranch: config.get<string>('baseBranch') ?? 'main',
 		language: config.get<'en' | 'pt-BR'>('language') ?? 'en',
-		useGitHubCLI: config.get<boolean>('useGitHubCLI') ?? true
+		useGitHubCLI: config.get<boolean>('useGitHubCLI') ?? true,
+		enableHEDRORules: config.get<boolean>('enableHEDRORules') ?? true,
+		companyPatterns: config.get<string>('companyPatterns') ?? 'hedro'
 	};
 }
 
@@ -43,7 +47,6 @@ export function openSettings(): void {
 	vscode.commands.executeCommand('workbench.action.openSettings', 'gitFlareAssistant');
 }
 
-// Prevenção adicional contra padrões vulneráveis
 export function validateApiKey(apiKey: string): boolean {
 	if (typeof apiKey !== 'string' || apiKey.length === 0) {
 		return false;
@@ -65,6 +68,7 @@ export function validateApiKey(apiKey: string): boolean {
 	}
 	return true;
 }
+
 export function isValidPRNumber(input: string): string | null {
   if (!input || typeof input !== 'string') return null;
   
