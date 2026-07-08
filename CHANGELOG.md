@@ -5,6 +5,23 @@ All notable changes to the "GitFlare Assistant" extension will be documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.6] - 2026-07-08
+
+### Added
+- **HEDRO company-specific PR review rules** - Automatic code review based on real HEDRO engineer feedback
+  - Unwrap/expect detection in service initialization (critical severity)
+  - SQL parameter documentation requirements (critical severity)  
+  - Platform enum usage enforcement (medium severity)
+  - RabbitMQ health check integration (medium severity)
+  - SQL parameter ordering rules (medium severity)
+  - Ruskit dependency version requirements (v1.73.5+)
+- **Documentação de especificação** - `.vscode/pr-review-spec.md` com todas as regras e heurísticas
+- **Guia de modelos OpenRouter** - `.vscode/openrouter-models.md` com modelos recomendados para revisão
+
+### Configuration
+- New setting: `gitFlareAssistant.enableHEDRORules` (default: true) - Enable/disable HEDRO-specific rules
+- New setting: `gitFlareAssistant.companyPatterns` (default: "hedro") - Select company pattern for review
+
 ## [0.1.5] - 2026-07-03
 
 ### Fixed
@@ -16,10 +33,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **PR Review Tool**: Analyze pull requests from other users directly in VS Code
 - **Interactive Model Picker** com busca por nome/ID
-
-### Configuration
-- New setting: `gitFlareAssistant.useModelPicker` (default: true) - Show model picker in settings
-- Model selection command: `GitFlare: Select Model`
 
 ## [Unreleased]
 
